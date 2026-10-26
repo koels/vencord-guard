@@ -39,9 +39,17 @@ INFO [updater_client::install]: Executing host install tasks.
 
 A **host** update on macOS downloads `full.distro` and replaces the entire `.app` bundle. The
 replacement contains a stock `app.asar` and no `_app.asar`, so the patch is gone — not damaged,
-*absent*. This is why macOS loses Vencord more often than Windows or Linux do: those platforms
-apply many updates as *module* updates under `Application Support`, which leave the patched
-bundle alone. On macOS, host updates rewrite the exact directory the patch lives in.
+*absent*. Most updates are *module* updates, which land under `Application Support` and leave
+the patched bundle alone; a host update is the one that rewrites the exact directory the patch
+lives in.
+
+Discord's updater drops the patch on every platform when it installs a new host — on Windows
+the new host unpacks into a fresh `app-<version>` directory and the old patched one stops being
+used. This is an anecdotal impression, not a measurement, but when Discord updates on macOS the
+patch seems to survive far less often: in my own use a Discord update on macOS has essentially
+never left Vencord in place, whereas Discord updating on Windows and Linux tends to leave it
+working and only occasionally needs a re-patch. Take that as the itch this tool scratches rather
+than as a benchmark.
 
 A second macOS-only factor makes it worse. Patching breaks the bundle's code signature:
 
